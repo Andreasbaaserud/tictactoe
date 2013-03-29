@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1364565680 source:/home/andreas/Dropbox/gitwork/tictactoe/Tictactoe/Gui.cpp
+	"Gui.h"
+	<iostream>
+	"stdlib.h"
+
+1364565863 /home/andreas/Dropbox/gitwork/tictactoe/Tictactoe/Gui.h
+
+1364565651 source:/home/andreas/Dropbox/gitwork/tictactoe/Tictactoe/main.cpp
+	<iostream>
+	"Gui.h"
+
