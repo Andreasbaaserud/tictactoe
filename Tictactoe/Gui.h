@@ -12,9 +12,13 @@ class Gui
         int checkwinner();
         void clearWindow();
         void createBoard();
+        void reprintBoard();
+        void createSquareH();
+        void createSquareV();
     protected:
     private:
-        char square[10]; //sette antall avhengig av hvor stort brettet er
+        int result;
+        int square[999]; //sette antall avhengig av hvor stort brettet er
 };
 
 
