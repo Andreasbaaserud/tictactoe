@@ -46,23 +46,41 @@ void Gui::start(){
 void Gui::build(){
     //setter inn verdier i arrayet
     int ant = 0;
-    int arr[result][result];
+//    int arr[result][result];
     for(int i = 0; i < result; i++){
         for(int j = 0; j < result; j++){
             arr[i][j] = square[ant++];
         }
     }
+    int player = 1,p,choice1,choice2;
+//    int mark;
+    do{
+        reprintBoard();
+        player=(player%2)?1:2;
+        cout << "Player " << player << endl;
+        cout << "enter X coord: ";
+        cin >> choice1;
+        cout << "enter Y coord: ";
+        cin >> choice2;
 
-    //skriver ut arrayet
-    for(int i = 0; i < result; i++){
-        for(int j = 0; j < result; j++){
-            cout << "[";
-            cout << arr[i][j] << "] \t";
-        }
-        cout << endl;
+        arr[choice1][choice2] = (player == 1) ? 999 : 111;
+        /*mark = (player == 1) ? 11 : 22; //999 = X, 000 = O
+        if(choice == 1 && arr[0][1] == 1)
+            arr[0][0] == mark;
+        else {
+            cout << "invalid move ";
+            player--;
+        }*/
+        p=checkwinner();
+        player++;
+    }while(p == -1);
+
+    if(p == 1){
+        cout << "\aPlayer " << player << " win " << endl;
     }
-
-
+    else{
+        cout << "\aGame draw" << endl;
+    }
     //ctor
 /*
     clearWindow();//system("cls");  //Gjør skjermen fri for tekst
@@ -81,11 +99,21 @@ void Gui::build(){
 }
 
 void Gui::reprintBoard(){
+    //skriver ut arrayet
+    for(int i = 0; i < result; i++){
+        for(int j = 0; j < result; j++){
+            cout << "[";
+            cout << arr[i][j] << "] \t";
+        }
+        cout << endl;
+    }
 }
 
-int Gui::checkwinner()
-{
-    return 0;
+int Gui::checkwinner(){
+    if(arr[0][0] == arr[0][1] && arr[0][1] == arr[0][2])
+        return 1;
+    else
+    return -1;
 }
 
 void Gui::rdy(){
