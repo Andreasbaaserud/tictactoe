@@ -17,9 +17,9 @@ class Gui
         void createSquareV();
     protected:
     private:
-        int result;
-        int arr[3][3]; //få til å oppdatere arrayet til 8........
-        int square[999]; //sette antall avhengig av hvor stort brettet er
+        int gameType;
+        char arr[999][999]; //få til å oppdatere arrayet til 8........
+//        char square[999]; //sette antall avhengig av hvor stort brettet er
 };
 
 
