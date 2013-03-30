@@ -5,6 +5,11 @@
 
 using namespace std;
 
+
+//TODO: Random hvem som starter, X eller O
+//TODO: Gjøre det enklere å plassere brikker(foreløpig koordinater)
+//TODO: Kompilere på linux(Studssh)
+
 string input = "";
 string boardSize = "0";
 int antallRuter = 0;
@@ -42,8 +47,6 @@ void Gui::start(){
     createBoard();
     build();
 }
-
-
 
 void Gui::build(){
     //setter inn verdier i arrayet
@@ -121,18 +124,7 @@ void Gui::reprintBoard(){
 }
 
 int Gui::checkwinner(){
-
-//    if(arr[0][0] == arr[0][1] && arr[0][1] == arr[0][2])
-//        return 1;
     bool win = false;
-//    //sjekker rader for 'X' og 'O'
-//    for(int i = 0; i < gameType; i++){
-//        for(int j = 0; j < gameType; j++){
-//            if(arr[i][j] != 'X')
-//                break;
-//        }
-//    }
-
 
     //sjekker rader for 'X'
     for(int i = 0; i < gameType; i++){
@@ -176,174 +168,28 @@ int Gui::checkwinner(){
             if(i == gameType-1)
                 win = true;
     }
-//    //sjekker rader for 'X'
-//    for(int i = 0; i < gameType; i++){
-//        for(int j = 0; j < gameType; j++){
-//            if(arr[i][j] == 'X')
-//                win = true;
-//            if(arr[i][j] == '#' || arr[i][j] == 'O')//den går gjennom HELE, skal kun gå gjennom én rad
-//                win = false;
-//        }
-//    }
-//    //sjekker rader for 'X' og 'O'
-//    for(int i = 0; i < gameType; i++){
-//        for(int j = 0; j < gameType; j++){
-//            if(arr[i][j] != 'O')
-//                break;
-//        }
-//    }
+    //sjekker anti-diagonalen for 'X'
+    for(int i = 0; i < gameType; i++){
+            if(arr[i][(gameType-1)-i] != 'X')
+                break;
+            if(i == gameType-1)
+                win = true;
+    }
+    //sjekker anti-diagonalen for 'O'
+    for(int i = 0; i < gameType; i++){
+            if(arr[i][(gameType-1)-i] != 'O')
+                break;
+            if(i == gameType-1)
+                win = true;
+    }
 
-//    //sjekker rader for 'X'
-//    for(int i = 0; i < gameType; i++){
-//        for(int j = 0; j < gameType; j++){
-//            if(arr[i][j] == 'O')
-//                win = true;
-//            if(arr[i][j] == '#')
-//                win = false;
-//        }
-//    }
-//    int row0Win = 0;
-//    int row1Win = 0;
-//    int row2Win = 0;
-//    int col0Win = 0;
-//    int col1Win = 0;
-//    int col2Win = 0;
-//    int countX = 0;
-//    int countO = 0;
-//    bool win = false;
-//    int row0 = 0;
-//    int row1 = 1;
-//    int row2 = 2;
-//    int col0 = 0;
-//    int col1 = 1;
-//    int col2 = 2;
-
-   /* for(int i = 0; i < gameType; i++){
-        for(int j = 0; j < gameType; j++){
-            if(arr[i][j] == 'X' && i == 0){
-                countWin++;
-            }
-            if(arr[i][j] == 'O' && i == 0){
-                countWin--;
-            }
-            if(arr[i][j] == 'X' && i == 1){
-                for(int k = 0; k < gameType; k++){
-                    if(arr[0][j] == 'X'){
-                        countWin++;
-                    }
-                }
-                countWin++;
-            }
-            if(arr[i][j] == 'O' && i == 1){
-                countWin--;
-            }
-        }*/
-//        //sjekker rad 0
-//        if(arr[row0][i] != '#'){
-//            if(arr[row0][i] == 'X'){
-//                row0Win++;
-//            }
-//            if(arr[row0][i] == 'O'){
-//                row0Win--;
-//            }
-//        }
-//        //sjekker rad 1
-//        if(arr[row1][i] != '#'){
-//            if(arr[row1][i] == 'X'){
-//                row1Win++;
-//            }
-//            if(arr[row1][i] == 'O'){
-//                row1Win--;
-//            }
-//        }
-//        //sjekker rad 2
-//        if(arr[row2][i] != '#'){
-//            if(arr[row2][i] == 'X'){
-//                row2Win++;
-//            }
-//            if(arr[row2][i] == 'O'){
-//                row2Win--;
-//            }
-//        }
-//        //sjekker kolonne 0
-//        if(arr[i][col0] != '#'){
-//            if(arr[i][col0] == 'X'){
-//                col0Win++;
-//            }
-//            if(arr[i][col0] == 'O'){
-//                col0Win--;
-//            }
-//        }
-//        //sjekker kolonne 1
-//        if(arr[i][col1] != '#'){
-//            if(arr[i][col1] == 'X'){
-//                col1Win++;
-//            }
-//            if(arr[i][col1] == 'O'){
-//                col1Win--;
-//            }
-//        }
-//        //sjekker kolonne 2
-//        if(arr[i][col2] != '#'){
-//            if(arr[i][col2] == 'X'){
-//                col2Win++;
-//            }
-//            if(arr[i][col2] == 'O'){
-//                col2Win--;
-//            }
-//        }
-//
-//        //rad0
-//        if(row0Win == gameType || row0Win == -gameType)
-//            win = true;
-//
-//        //rad1
-//        if(row1Win == gameType || row1Win == -gameType)
-//            win = true;
-//
-//        //rad2
-//        if(row2Win == gameType || row2Win == -gameType)
-//            win = true;
-//
-//        //kolonne0
-//        if(col0Win == gameType || col0Win == -gameType)
-//            win = true;
-//
-//        //kolonne1
-//        if(col1Win == gameType || col1Win == -gameType)
-//            win = true;
-//
-//        //kolonne2
-//        if(col2Win == gameType || col2Win == -gameType)
-//            win = true;
-//    }
-
-   /* for(int i = 0; i < gameType; i++){
-        countWin = 0;
-        //sjekker rad 1
-        if(arr[row1][i] != '#'){
-            if(arr[row1][i] == 'X'){
-                countWin++;
-            }
-            if(arr[row1][i] == 'O'){
-                countWin--;
-            }
-        }
-        if(countWin == gameType)
-            win = true;
-    }*/
-//    cout << countWin;
-//    //countWin = 3 == WIN
-//    //countWin = 2 == DRAW
-//    //countWin = 1 == DRAW
-//    //countWin = -3 == WIN
     rounds++;
     if(win)
         return 1; //X eller O har vunnet
-    if(rounds == gameType*gameType)
-        return -1;
+    else if(rounds == (gameType*gameType))
+        return 2; //Draw
     else
-        return -1;
+        return -1; //Foreløpig ingen vinnere
 }
 
 void Gui::rdy(){
