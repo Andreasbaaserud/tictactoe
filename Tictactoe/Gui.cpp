@@ -8,6 +8,8 @@ using namespace std;
 string input = "";
 string boardSize = "0";
 int antallRuter = 0;
+int rounds = 0;
+int choice1,choice2;
 Gui::Gui()
 {
     cout << "Welcome to Tic Tac Toe" << endl;
@@ -52,7 +54,7 @@ void Gui::build(){
             arr[i][j] = '#';
         }
     }
-    int player = 1,p,choice1,choice2;
+    int player = 1,p;
 //    int mark;
     do{
         reprintBoard();
@@ -119,9 +121,87 @@ void Gui::reprintBoard(){
 }
 
 int Gui::checkwinner(){
+
 //    if(arr[0][0] == arr[0][1] && arr[0][1] == arr[0][2])
 //        return 1;
-    int countWin = 0;
+    bool win = false;
+//    //sjekker rader for 'X' og 'O'
+//    for(int i = 0; i < gameType; i++){
+//        for(int j = 0; j < gameType; j++){
+//            if(arr[i][j] != 'X')
+//                break;
+//        }
+//    }
+
+
+    //sjekker rader for 'X'
+    for(int i = 0; i < gameType; i++){
+            if(arr[choice1][i] != 'X')
+                break;
+            if(i == gameType-1)
+                win = true;
+    }
+    //sjekker rader for 'O'
+    for(int i = 0; i < gameType; i++){
+            if(arr[choice1][i] != 'O')
+                break;
+            if(i == gameType-1)
+                win = true;
+    }
+    //sjekker kolonner for 'X'
+    for(int i = 0; i < gameType; i++){
+            if(arr[i][choice2] != 'X')
+                break;
+            if(i == gameType-1)
+                win = true;
+    }
+    //sjekker kolonner for 'O'
+    for(int i = 0; i < gameType; i++){
+            if(arr[i][choice2] != 'O')
+                break;
+            if(i == gameType-1)
+                win = true;
+    }
+    //sjekker diagonalen for 'X'
+    for(int i = 0; i < gameType; i++){
+            if(arr[i][i] != 'X')
+                break;
+            if(i == gameType-1)
+                win = true;
+    }
+    //sjekker diagonalen for 'O'
+    for(int i = 0; i < gameType; i++){
+            if(arr[i][i] != 'O')
+                break;
+            if(i == gameType-1)
+                win = true;
+    }
+//    //sjekker rader for 'X'
+//    for(int i = 0; i < gameType; i++){
+//        for(int j = 0; j < gameType; j++){
+//            if(arr[i][j] == 'X')
+//                win = true;
+//            if(arr[i][j] == '#' || arr[i][j] == 'O')//den går gjennom HELE, skal kun gå gjennom én rad
+//                win = false;
+//        }
+//    }
+//    //sjekker rader for 'X' og 'O'
+//    for(int i = 0; i < gameType; i++){
+//        for(int j = 0; j < gameType; j++){
+//            if(arr[i][j] != 'O')
+//                break;
+//        }
+//    }
+
+//    //sjekker rader for 'X'
+//    for(int i = 0; i < gameType; i++){
+//        for(int j = 0; j < gameType; j++){
+//            if(arr[i][j] == 'O')
+//                win = true;
+//            if(arr[i][j] == '#')
+//                win = false;
+//        }
+//    }
 //    int row0Win = 0;
 //    int row1Win = 0;
 //    int row2Win = 0;
@@ -138,13 +218,26 @@ int Gui::checkwinner(){
 //    int col1 = 1;
 //    int col2 = 2;
 
-    for(int i = 0; i < gameType; i++){
+   /* for(int i = 0; i < gameType; i++){
         for(int j = 0; j < gameType; j++){
-            if(arr[i][j] == 'X')
+            if(arr[i][j] == 'X' && i == 0){
                 countWin++;
-            if(arr[i][j] == 'O')
+            }
+            if(arr[i][j] == 'O' && i == 0){
                 countWin--;
-        }
+            }
+            if(arr[i][j] == 'X' && i == 1){
+                for(int k = 0; k < gameType; k++){
+                    if(arr[0][j] == 'X'){
+                        countWin++;
+                    }
+                }
+                countWin++;
+            }
+            if(arr[i][j] == 'O' && i == 1){
+                countWin--;
+            }
+        }*/
 //        //sjekker rad 0
 //        if(arr[row0][i] != '#'){
 //            if(arr[row0][i] == 'X'){
@@ -223,7 +316,7 @@ int Gui::checkwinner(){
 //        //kolonne2
 //        if(col2Win == gameType || col2Win == -gameType)
 //            win = true;
-    }
+//    }
 
    /* for(int i = 0; i < gameType; i++){
         countWin = 0;
@@ -239,13 +332,16 @@ int Gui::checkwinner(){
         if(countWin == gameType)
             win = true;
     }*/
-    cout << countWin;
-    //countWin = 3 == WIN
-    //countWin = 2 == DRAW
-    //countWin = 1 == DRAW
-    //countWin = -3 == WIN
-    if(countWin == gameType)
+//    cout << countWin;
+//    //countWin = 3 == WIN
+//    //countWin = 2 == DRAW
+//    //countWin = 1 == DRAW
+//    //countWin = -3 == WIN
+    rounds++;
+    if(win)
         return 1; //X eller O har vunnet
+    if(rounds == gameType*gameType)
+        return -1;
     else
         return -1;
 }
