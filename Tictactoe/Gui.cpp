@@ -49,16 +49,16 @@ int Gui::randomPlayer(int a, int b){
         return b;
 }
 
-int Gui::randomChoice1(){
+int Gui::randomChoiceX(){
     return rand() % gameType;
 }
 
-int Gui::randomChoice2(){
+int Gui::randomChoiceY(){
     return rand() % gameType;
 }
 
 void Gui::build(){
-    int holdPlayer;
+    int holdPlayer; //Sparer på player
     //setter inn verdien '#' i arrayet
     for(int i = 0; i < gameType; i++){
         for(int j = 0; j < gameType; j++){
@@ -77,8 +77,8 @@ void Gui::build(){
     do{
         if(machine){
             srand(time(NULL));
-            choiceX = randomChoice1();
-            choiceY = randomChoice2();
+            choiceX = randomChoiceX();
+            choiceY = randomChoiceY();
         }
         reprintBoard();
         cout << "Player " << player << endl;
