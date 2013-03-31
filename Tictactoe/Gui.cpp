@@ -5,9 +5,7 @@
 
 using namespace std;
 
-//Sette valg for om man vil at computer skal spille, eller manuelt..
 //TODO: Gjøre det enklere å plassere brikker(foreløpig koordinater)
-//TODO: Kompilere på linux(Studssh)
 
 string input = "";
 string boardSize = "0";
