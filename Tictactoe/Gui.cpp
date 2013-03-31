@@ -5,41 +5,33 @@
 
 using namespace std;
 
-
-//TODO: Random hvem som starter, X eller O
+//Sette valg for om man vil at computer skal spille, eller manuelt..
 //TODO: Gjøre det enklere å plassere brikker(foreløpig koordinater)
 //TODO: Kompilere på linux(Studssh)
 
 string input = "";
 string boardSize = "0";
+string answer = "";
+bool machine = false;
 int antallRuter = 0;
 int rounds = 0;
-int choice1,choice2;
+
 Gui::Gui()
 {
-    cout << "Welcome to Tic Tac Toe" << endl;
-    cout << "Rules are Simple: \n" << endl;
+    cout << "Welcome to Tic Tac Toe (NxN)" << endl;
+    cout << "Rules are Simple:" << endl;
     cout << "1) Player 1 will be marked with an 'X'" << endl;
     cout << "2) Player 2 will be marked with an 'O'" << endl;
-    cout << "3) You write the number where you want to place your letter." << endl;
+    cout << "3) You write the X and Y coordinates where you want to place your letter." << endl;
     cout << endl;
-    cout << "#Important note: Avoid the player you play against to get 3 letters vertically, horisontally or diagonaly" << endl;
+    cout << "Important note:" << endl;
+    cout << "1) Avoid the player you play against to get 3 letters vertically, horisontally or diagonaly" << endl;
+    cout << "2) coordinates starts at 0,0 and ends at n,n" << endl;
+    cout << "3) it is random who will start" << endl;
     cout << endl;
-    cout << "This is how it will look like! amazing right?" << endl;
-    //ctor
-    cout << "Player 1 (X)  -   Player 2 (O)" << endl << endl;
-    cout << endl;
-    cout << "     |     |     " << endl;
-    cout << "_____|_____|_____" << endl;
-    cout << "     |     |     " << endl;
-    cout << "_____|_____|_____" << endl;
-    cout << "     |     |     " << endl;
-    cout << "     |     |     " << endl << endl;
+
     cout << "Lets get roling and play the game!" << endl;
     cout << endl;
-//    for(int i = 0; i < sizeof(square); i++){
-//        square[i] = antallRuter++;
-//    }
     rdy();
 }
 
@@ -48,66 +40,82 @@ void Gui::start(){
     build();
 }
 
+int Gui::randomPlayer(int a, int b){
+    srand(time(NULL));
+    int r = rand()%2;
+    if(r == 0)
+        return a;
+    else
+        return b;
+}
+
+int Gui::randomChoice1(){
+    return rand() % gameType;
+}
+
+int Gui::randomChoice2(){
+    return rand() % gameType;
+}
+
 void Gui::build(){
-    //setter inn verdier i arrayet
-//    int ant = 0;
-//    int arr[gameType][gameType];
+    int holdPlayer;
+    //setter inn verdien '#' i arrayet
     for(int i = 0; i < gameType; i++){
         for(int j = 0; j < gameType; j++){
             arr[i][j] = '#';
         }
     }
-    int player = 1,p;
-//    int mark;
-    do{
-        reprintBoard();
-        player=(player%2)?1:2;
-        cout << "Player " << player << endl;
-        cout << "enter X coord: ";
-        cin >> choice1;
-        cout << "enter Y coord: ";
-        cin >> choice2;
 
-        if(arr[choice1][choice2] == '#'){
-            arr[choice1][choice2] = (player == 1) ? 'X' : 'O';
+    int player = randomPlayer(1,2),p;
+    cout << "Machine vs Machine?(y/n): ";
+    cin >> answer;
+    if(answer == "y")
+        machine = true;
+    else if(answer == "n")
+        machine = false;
+
+    do{
+        if(machine){
+            srand(time(NULL));
+            choiceX = randomChoice1();
+            choiceY = randomChoice2();
         }
-        else{
-            player--; //gjør så man ikke mister et trekk
+        reprintBoard();
+        cout << "Player " << player << endl;
+        if(!machine){
+            cout << "enter X coord: ";
+            cin >> choiceX;
+            cout << "enter Y coord: ";
+            cin >> choiceY;
         }
-        /*mark = (player == 1) ? 11 : 22; //999 = X, 000 = O
-        if(choice == 1 && arr[0][1] == 1)
-            arr[0][0] == mark;
-        else {
-            cout << "invalid move ";
-            player--;
-        }*/
+        if(arr[choiceX][choiceY] == '#')
+            arr[choiceX][choiceY] = (player == 1) ? 'X' : 'O';
+        else if(player == 1){ //invalid move
+            player++;
+            rounds--;
+        }
+        else if(player == 2){//invalid move
+            player --;
+            rounds--;
+        }
+
+        holdPlayer = player;
         p=checkwinner();
-        player++;
+        if(player == 1)
+            player++;
+        else if(player == 2)
+            player--;
     }while(p == -1);
 
     if(p == 1){
         reprintBoard();
-        cout << "\aPlayer " << --player << " win" << endl;
+        cout << "\aPlayer " << holdPlayer << " win" << endl;
     }
     else{
         reprintBoard();
         cout << "\aGame draw" << endl;
     }
     //ctor
-/*
-    clearWindow();//system("cls");  //Gjør skjermen fri for tekst
-    cout << "Player 1 (X)  -   Player 2 (O)" << endl;
-    cout << endl;
-    cout << "     |     |     " << endl;
-    cout << "  " << square[1] << "  |  " << square[2]<< "  |  " << square[3] << endl;
-    cout << "_____|_____|_____" << endl;
-    cout << "     |     |     " << endl;
-	cout << "  " << square[4] << "  |  " << square[5] << "  |  " << square[6] << endl;
-    cout << "_____|_____|_____" << endl;
-    cout << "     |     |     " << endl;
-	cout << "  " << square[7] << "  |  " << square[8] << "  |  " << square[9] << endl;
-    cout << "     |     |     " << endl << endl;
-*/
 }
 
 void Gui::reprintBoard(){
@@ -128,28 +136,28 @@ int Gui::checkwinner(){
 
     //sjekker rader for 'X'
     for(int i = 0; i < gameType; i++){
-            if(arr[choice1][i] != 'X')
+            if(arr[choiceX][i] != 'X')
                 break;
             if(i == gameType-1)
                 win = true;
     }
     //sjekker rader for 'O'
     for(int i = 0; i < gameType; i++){
-            if(arr[choice1][i] != 'O')
+            if(arr[choiceX][i] != 'O')
                 break;
             if(i == gameType-1)
                 win = true;
     }
     //sjekker kolonner for 'X'
     for(int i = 0; i < gameType; i++){
-            if(arr[i][choice2] != 'X')
+            if(arr[i][choiceY] != 'X')
                 break;
             if(i == gameType-1)
                 win = true;
     }
     //sjekker kolonner for 'O'
     for(int i = 0; i < gameType; i++){
-            if(arr[i][choice2] != 'O')
+            if(arr[i][choiceY] != 'O')
                 break;
             if(i == gameType-1)
                 win = true;
@@ -197,7 +205,7 @@ void Gui::rdy(){
             cout << "Ready to start?(y/n):" << ends;
             getline(cin, input);
             if(input == "y"){
-                clearWindow();//system("cls");  //Gjør skjermen fri for tekst
+                clearWindow();
                 Gui::start();
             }
             else if(input == "n"){
@@ -206,24 +214,13 @@ void Gui::rdy(){
 }
 
 void Gui::createBoard(){
+    do{
     cout << "Oppgi brettstorrelse (mellom 3 og n): " << ends;
     getline(cin, boardSize);
     stringstream convert(boardSize);
-
     if( !(convert >> gameType))
             gameType = 0; //hvis resultat ikke får noen verdi blir resultat satt default til 0
-
-
-//    for(int i = 0; i < result*result; i++){
-//        square[i] = antallRuter++;
-//    }
-    //    for(int i = 0; i <= 1; i++){
-//        cout << "[" << endl;
-//        for(int j = 0; j <= 2; j++){
-//            cout << " " + arr[i][j] << endl;
-//        }
-//        cout << " ]" << endl;
-//    }
+    }while(gameType == NULL || gameType == 0 || gameType == 1 || gameType == 2 || gameType < 0);
 }
 
 //Implimenterer automatisk generering av brettet senere..
@@ -244,6 +241,7 @@ void Gui::createSquareV(){
 
 void Gui::clearWindow(){
     //Sjekker om systemet kjøres på windows eller linux
+    //kall på metoden vil gjøre skjermen fri for tekst
     #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
         system("cls");  //Gjør skjermen fri for tekst i windows command prompt
 

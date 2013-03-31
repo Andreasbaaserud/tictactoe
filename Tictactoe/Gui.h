@@ -13,13 +13,16 @@ class Gui
         void clearWindow();
         void createBoard();
         void reprintBoard();
-        void createSquareH();
-        void createSquareV();
+//        void createSquareH();
+//        void createSquareV();
+        int randomPlayer(int,int);
+        int randomChoice1();
+        int randomChoice2();
     protected:
     private:
         int gameType;
-        char arr[999][999]; //få til å oppdatere arrayet til 8........
-//        char square[999]; //sette antall avhengig av hvor stort brettet er
+        int choiceX,choiceY;
+        char arr[999][999]; //rett måte?
 };
 
 
