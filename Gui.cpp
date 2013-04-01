@@ -1,15 +1,21 @@
+//Navn: Andreas Baaserud
+//Studnr: s169982
+//År: 2013
+
 #include "Gui.h"
 #include <iostream>
 #include "stdlib.h"
 #include <sstream>
+#include <time.h>
+#include <unistd.h>
 
 using namespace std;
 
-//TODO: Gjøre det enklere å plassere brikker(foreløpig koordinater)
-
 string input = "";
+string playAgain = "";
 string boardSize = "0";
 string answer = "";
+bool slow = false;
 bool machine = false;
 int antallRuter = 0;
 int rounds = 0;
@@ -17,6 +23,11 @@ int rounds = 0;
 Gui::Gui()
 {
     cout << "Welcome to Tic Tac Toe (NxN)" << endl;
+    cout << "*******************************" << endl;
+    cout << "**          Created by       **" << endl;
+    cout << "**       Andreas Baaserud    **" << endl;
+    cout << "**             2013          **" << endl;
+    cout << "*******************************" << endl;
     cout << "Rules are Simple:" << endl;
     cout << "1) Player 1 will be marked with an 'X'" << endl;
     cout << "2) Player 2 will be marked with an 'O'" << endl;
@@ -34,7 +45,7 @@ Gui::Gui()
 }
 
 void Gui::start(){
-    createBoard();
+    settings();
     build();
 }
 
@@ -56,6 +67,7 @@ int Gui::randomChoiceY(){
 }
 
 void Gui::build(){
+    srand(time(0));
     int holdPlayer; //Sparer på player
     //setter inn verdien '#' i arrayet
     for(int i = 0; i < gameType; i++){
@@ -64,30 +76,26 @@ void Gui::build(){
         }
     }
 
-    int player = randomPlayer(1,2),p;
-    cout << "Machine vs Machine?(y/n): ";
-    cin >> answer;
-    if(answer == "y")
-        machine = true;
-    else if(answer == "n")
-        machine = false;
-
+    int player = randomPlayer(1,2);
+    int p;
     do{
         if(machine){
-            srand(time(NULL));
             choiceX = randomChoiceX();
             choiceY = randomChoiceY();
         }
-        reprintBoard();
-        cout << "Player " << player << endl;
+
         if(!machine){
             cout << "enter X coord: ";
             cin >> choiceX;
             cout << "enter Y coord: ";
             cin >> choiceY;
         }
-        if(arr[choiceX][choiceY] == '#')
+
+        if(arr[choiceX][choiceY] == '#' ){
             arr[choiceX][choiceY] = (player == 1) ? 'X' : 'O';
+            reprintBoard();
+            cout << "Player " << player << " coords: " << choiceX << "," << choiceY << endl;
+        }
         else if(player == 1){ //invalid move
             player++;
             rounds--;
@@ -107,23 +115,53 @@ void Gui::build(){
 
     if(p == 1){
         reprintBoard();
-        cout << "\aPlayer " << holdPlayer << " win" << endl;
+        cout << "******************" << endl;
+        cout << "** Player " << holdPlayer << " won **" << endl;
+        cout << "******************" << endl;
+        cout << endl;
+        qPlayAgain();
     }
     else{
         reprintBoard();
-        cout << "\aGame draw" << endl;
+        cout << "***************" << endl;
+        cout << "** Game draw **" << endl;
+        cout << "***************" << endl;
+        cout << endl;
+        qPlayAgain();
     }
     //ctor
 }
 
+void Gui::qPlayAgain(){
+    playAgain = "";
+    cout << "Play again(y/n)? " << ends;
+    cin >> playAgain;
+    cout << endl;
+    if(playAgain == "y"){
+        rounds = 0;
+        start();
+    }
+    else if(playAgain == "n")
+        system("exit");
+
+    }
+
 void Gui::reprintBoard(){
-    //skriver ut arrayet
+    //skriver ut arrayet på nytt
+    if(slow){
+        sleep(1);
+    }
     clearWindow();
     for(int i = 0; i < gameType; i++){
-
         for(int j = 0; j < gameType; j++){
             cout << "[";
-            cout << arr[i][j] << "] \t";
+            if(arr[i][j] == '#'){
+                cout << i << "," <<j;
+            }
+            else{
+                cout << arr[i][j];
+            }
+            cout << "] \t";
         }
         cout << endl << endl;
     }
@@ -131,6 +169,8 @@ void Gui::reprintBoard(){
 
 int Gui::checkwinner(){
     bool win = false;
+
+    //Legge til sjekk om draw før alle ruter er utfylt
 
     //sjekker rader for 'X'
     for(int i = 0; i < gameType; i++){
@@ -211,31 +251,33 @@ void Gui::rdy(){
             }
 }
 
-void Gui::createBoard(){
+void Gui::settings(){
+    cout << "***GAME SETTINGS***" << endl;
+    cout << "Choose boardsize (between 3 and n): " << ends;
     do{
-    cout << "Oppgi brettstorrelse (mellom 3 og n): " << ends;
     getline(cin, boardSize);
     stringstream convert(boardSize);
+
     if( !(convert >> gameType))
             gameType = 0; //hvis resultat ikke får noen verdi blir resultat satt default til 0
-    }while(gameType == NULL || gameType == 0 || gameType == 1 || gameType == 2 || gameType < 0);
-}
+    }while(gameType == 1 || gameType == 2 || gameType <= 0);
 
-//Implimenterer automatisk generering av brettet senere..
-/*void Gui::createSquareH(){
-    cout << "_______" << ends;
-//    cout << "|     |" << endl;
-//    cout << "|     |" << endl;
-//    cout << "|_____|" << ends;
+    cout << "Machine vs Machine?(y/n): ";
+    cin >> answer;
+    if(answer == "y"){
+        answer = "";
+        machine = true;
+        cout << "Wish to view in slow motion?(y/n): ";
+        cin >> answer;
+        if(answer == "y")
+            slow = true;
+        if(answer == "n")
+            slow = false;
+    }
+    else if(answer == "n"){
+        machine = false;
+    }
 }
-
-void Gui::createSquareV(){
-    cout << "|         " << endl;
-//    cout << "_______" << endl;
-//    cout << "|     |" << endl;
-//    cout << "|     |" << endl;
-//    cout << "|_____|" << endl;
-}*/
 
 void Gui::clearWindow(){
     //Sjekker om systemet kjøres på windows eller linux
